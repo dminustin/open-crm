@@ -1,0 +1,10 @@
+{
+  "DB_TYPE": "mysql",
+  "DB_HOST": "127.0.0.1",
+  "DB_NAME": "opencrm",
+  "DB_USER": "danila",
+  "DB_PASS": "danila",
+  "DB_CHARSET": "utf8",
+  "PASS_SALT1": "You HAVE TO ChanGe ths value",
+  "PASS_SALT2": "AnD this value too"
+}

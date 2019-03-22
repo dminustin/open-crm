@@ -1,0 +1,23 @@
+{
+    "name": "dminustin/open-crm",
+    "description": "Open CRM - basic CRM written on PHP",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Danila Minustin",
+            "email": "danila.minustin@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "twig/twig": "^2.0"
+    },
+    "autoload":
+    {
+        "psr-4":
+        {
+            "OpenCRM\\" : "application/"
+        }
+    }
+}

@@ -1,0 +1,17 @@
+#!/usr/bin/php
+<?php
+require_once('loader.php');
+
+array_shift($_SERVER['argv']);
+$command = array_shift($_SERVER['argv']);
+$args = $_SERVER['argv'];
+if (empty($command)) {
+    die('Use php console COMMAND');
+}
+
+$class = 'OpenCRM\\Console\\' . ucfirst($command);
+if (!class_exists($class, true)) {
+    die('Command not defined at App/Console/');
+}
+
+call_user_func("${class}::run", $args);
