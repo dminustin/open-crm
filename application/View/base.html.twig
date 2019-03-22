@@ -1,3 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
 {% block header %}{% include "header.html.twig" %}{% endblock %}
+<title>{% block title %}{% endblock %}</title>
+{% block css %}{% endblock %}
+    {% block scripts %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">OpenCRM</a>
+    <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId"
+            aria-controls="collapsibleNavId"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavId">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            {% if userLogged %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/app/dashboard">Dashboard</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">Contacts</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownId">
+                        <a class="dropdown-item" href="/app/contacts/list">List</a>
+                        <a class="dropdown-item" href="/app/contacts/add">Add new</a>
+                    </div>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home/Login</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<div class="v-pad10"></div>
+<div class="container">
 {% block body %}{% endblock %}
+</div>
 {% block footer %}{% include "footer.html.twig" %}{% endblock %}

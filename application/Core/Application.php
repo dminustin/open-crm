@@ -1,30 +1,29 @@
 <?php
 /** For more info about namespaces plase @see http://php.net/manual/en/language.namespaces.importing.php */
+
 namespace OpenCRM\Core;
+
+use OpenCRM\Controller\Ajax\AjaxLogin;
+use OpenCRM\Controller\App\ContactsAddClass;
+use OpenCRM\Controller\App\DashboardClass;
+use OpenCRM\Controller\HomeController;
+use Symfony\Component\Cache\Adapter\AbstractAdapter;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 class Application
 {
     /**
      * @var $app Application
      */
-    private static $app;
+    protected static $app;
 
     /** @var array Config parameters */
     public $config = [];
 
-    /** @var null The controller */
-    private $url_controller = null;
-
-    /** @var null The method (of the above controller), often also named "action" */
-    private $url_action = null;
-
-    /** @var array URL parameters */
-    private $url_params = [];
-
     /**
      * @var \Twig\Environment
      */
-    private $render;
+    protected $render;
 
     /**
      * @var \PDO
@@ -33,10 +32,16 @@ class Application
 
 
     /**
+     * @var AbstractAdapter
+     */
+    public $cache;
+
+    /**
      * Use this method to get an Application class
      * @return Application
      */
-    static function app() {
+    static function app()
+    {
         if (empty(static::$app)) {
             static::$app = new Self();
         }
@@ -52,57 +57,45 @@ class Application
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function render($template, $vars=[]) {
-        return $this->render->render($template, $vars);
+    public function render($template, $vars = [])
+    {
+        $vars['userLogged'] = userLogged();
+        echo $this->render->render($template, $vars);
     }
 
 
     /**
      * Run the Web App
      */
-    public function run() {
-        // create array with URL parts in $url
-        $this->splitUrl();
+    public function run()
+    {
+        $router = new \Bramus\Router\Router();
 
-        // check for controller: no controller given ? then load start-page
-        if (!$this->url_controller) {
+        $router->all('/', function () {
+            HomeController::indexPage();
+        });
 
-            $page = new \OpenCRM\Controller\HomeController();
-            $page->index();
-
-        } elseif (file_exists(APP . 'Controller/' . ucfirst($this->url_controller) . 'Controller.php')) {
-            // here we did check for controller: does such a controller exist ?
-
-            // if so, then load this file and create this controller
-            // like \OpenCRM\Controller\CarController
-            $controller = "\\OpenCRM\\Controller\\" . ucfirst($this->url_controller) . 'Controller';
-            $this->url_controller = new $controller();
-
-            // check for method: does such a method exist in the controller ?
-            if (method_exists($this->url_controller, $this->url_action) &&
-                is_callable(array($this->url_controller, $this->url_action))) {
-
-                if (!empty($this->url_params)) {
-                    // Call the method and pass arguments to it
-                    call_user_func_array(array($this->url_controller, $this->url_action), $this->url_params);
-                } else {
-                    // If no parameters are given, just call the method without parameters, like $this->home->method();
-                    $this->url_controller->{$this->url_action}();
-                }
-
-            } else {
-                if (strlen($this->url_action) == 0) {
-                    // no action defined: call the default index() method of a selected controller
-                    $this->url_controller->index();
-                } else {
-                    $page = new \OpenCRM\Controller\ErrorController();
-                    $page->index();
-                }
-            }
-        } else {
-            $page = new \OpenCRM\Controller\ErrorController();
-            $page->index();
+        $router->post('/ajax/login', function () {
+            AjaxLogin::run();
         }
+        );
+
+
+        if (userLogged()) {
+            $router->all('/app/dashboard', function () {
+                DashboardClass::run();
+            });
+            $router->all('/app/contacts/add', function () {
+                ContactsAddClass::run();
+            });
+        }
+
+        $router->set404(function () {
+            header('HTTP/1.1 404 Not Found');
+            HomeController::e404();
+        });
+
+        $router->run();
 
     }
 
@@ -132,36 +125,11 @@ class Application
         $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         $this->db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
 
+        //Init cache
+        $this->cache = Cache::getInstance($this->config['CACHE_TYPE']);
+
+
     }
 
-    /**
-     * Get and split the URL
-     */
-    private function splitUrl()
-    {
-        if (isset($_GET['url'])) {
 
-            // split URL
-            $url = trim($_GET['url'], '/');
-            $url = filter_var($url, FILTER_SANITIZE_URL);
-            $url = explode('/', $url);
-
-            // Put URL parts into according properties
-            // By the way, the syntax here is just a short form of if/else, called "Ternary Operators"
-            // @see http://davidwalsh.name/php-shorthand-if-else-ternary-operators
-            $this->url_controller = isset($url[0]) ? $url[0] : null;
-            $this->url_action = isset($url[1]) ? $url[1] : null;
-
-            // Remove controller and action from the split URL
-            unset($url[0], $url[1]);
-
-            // Rebase array keys and store the URL params
-            $this->url_params = array_values($url);
-
-            // for debugging. uncomment this if you have problems with the URL
-            //echo 'Controller: ' . $this->url_controller . '<br>';
-            //echo 'Action: ' . $this->url_action . '<br>';
-            //echo 'Parameters: ' . print_r($this->url_params, true) . '<br>';
-        }
-    }
 }

@@ -1,52 +1,30 @@
 <?php
 
-/**
- * Class HomeController
- *
- * Please note:
- * Don't use the same name for class and method, as this might trigger an (unintended) __construct of the class.
- * This is really weird behaviour, but documented here: http://php.net/manual/en/language.oop5.decon.php
- *
- */
-
 namespace OpenCRM\Controller;
 
-use OpenCRM\Core\Application;
 
 class HomeController
 {
     /**
-     * PAGE: index
-     * This method handles what happens when you move to http://yourproject/home/index (which is the default page btw)
+     * Start page
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function index()
+    public static function indexPage()
     {
         echo render('index.html.twig');
     }
 
     /**
-     * PAGE: exampleone
-     * This method handles what happens when you move to http://yourproject/home/exampleone
-     * The camelCase writing is just for better readability. The method name is case-insensitive.
+     * Error 404
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function exampleOne()
+    public static function e404()
     {
-        // load views
-        require APP . 'View/_templates/header.php';
-        require APP . 'View/home/example_one.php';
-        require APP . 'View/_templates/footer.php';
+        echo render('e404.html.twig');
     }
 
-    /**
-     * PAGE: exampletwo
-     * This method handles what happens when you move to http://yourproject/home/exampletwo
-     * The camelCase writing is just for better readability. The method name is case-insensitive.
-     */
-    public function exampleTwo()
-    {
-        // load views
-        require APP . 'View/_templates/header.php';
-        require APP . 'View/home/example_two.php';
-        require APP . 'View/_templates/footer.php';
-    }
 }

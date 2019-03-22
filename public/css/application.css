@@ -1,0 +1,23 @@
+* {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px; }
+
+.v-pad10 {
+  margin-top: 10px; }
+
+.v-pad20 {
+  margin-top: 20px; }
+
+.v-pad30 {
+  margin-top: 30px; }
+
+.right {
+  text-align: right; }
+
+.center {
+  text-align: center; }
+
+.left {
+  text-align: left; }
+
+/*# sourceMappingURL=application.css.map */

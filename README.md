@@ -25,6 +25,8 @@ Before installation you have to **change config files.**
 * In command line run console install
 
 
+## First steps
+Use admin / admin to log in
 
 
 ## License
@@ -34,4 +36,6 @@ This project is licensed under the MIT License. This means you can use and modif
 
 [TWIG](https://github.com/twigphp/Twig) template language
 
+[bramus/router](https://github.com/bramus/router) A lightweight and simple object oriented PHP Router. Built by Bram(us) Van Damme
 
+Symfony Cache

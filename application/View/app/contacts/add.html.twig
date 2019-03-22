@@ -1,0 +1,40 @@
+{% extends "base.html.twig" %}
+{% block title %}New/Edit contact{% endblock %}
+{% block body %}
+    <div class="container" id="form">
+        <input type="hidden" name="id" value="">
+        <div class="form-group">
+            <label for="inputName" class="col-sm-1-12 col-form-label">Display name</label>
+            <input type="text" class="form-control" name="display_name" id="display_name" placeholder="Display name">
+        </div>
+        <div class="form-group">
+            <label for="inputName" class="col-sm-1-12 col-form-label">Phone</label>
+            <input type="text" class="form-control" name="display_name" id="phone" placeholder="Phone">
+        </div>
+        <div class="form-group">
+            <label for="inputName" class="col-sm-1-12 col-form-label">Email</label>
+            <input type="text" class="form-control" name="display_name" id="email" placeholder="email">
+        </div>
+        <div class="form-group">
+            <label for="inputName" class="col-sm-1-12 col-form-label">Category</label>
+            <select class="form-control" name="category" id="category" placeholder="category">
+                <option value="">Choose one</option>
+                {% for cat in categories %}
+                    <option value="{{ cat.id }}" title="{{ cat.description }}">{{ cat.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="inputName" class="col-sm-1-12 col-form-label">Description short</label>
+            <input type="text" class="form-control" name="display_name" id="description_short" placeholder="description short">
+        </div>
+        <div class="form-group">
+            <label for="inputName" class="col-sm-1-12 col-form-label">Description full</label>
+            <textarea class="form-control" name="display_name" id="description_full" placeholder="description full" rows="5"></textarea>
+        </div>
+        <div class="form-group right">
+            <button type="button" id="saveBtn" class="btn btn-success"><span><i class="fa fa-check" aria-hidden="true"></i> Save</span></button>
+        </div>
+    </div>
+
+{% endblock %}

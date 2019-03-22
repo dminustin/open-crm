@@ -1,4 +1,9 @@
 {% extends "base.html.twig" %}
+{% block title %}Welcome page{% endblock %}
 {% block body %}
-Hallo
+    {% if userLogged %}
+        Welcome!
+    {% else %}
+        {% include "elements/login.html.twig" %}
+    {% endif %}
 {% endblock %}

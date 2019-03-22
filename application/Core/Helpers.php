@@ -35,3 +35,34 @@ function db() {
 function render($template, $vars=[]) {
     return Application::app()->render($template, $vars);
 }
+
+/**
+ * Returns true if user is logged in
+ * @return bool
+ */
+function userLogged() {
+    return (isset($_SESSION['userdata']));
+}
+
+
+/**
+ * Returns POST var or null
+ * @param $key
+ * @return null|mixed
+ */
+function getPostVar($key, $quote = false) {
+    return (isset($_POST[$key])) ?
+        ($quote) ? quote($_POST[$key]) : $_POST[$key]
+        : null;
+}
+
+function quote($value) {
+    return trim(htmlentities($value, ENT_QUOTES, 'utf-8', false));
+}
+
+/**
+ * @return \Symfony\Component\Cache\Adapter\AbstractAdapter
+ */
+function cache() {
+    return Application::app()->cache;
+}

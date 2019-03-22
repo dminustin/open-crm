@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: danila
+ * UserModel: danila
  * Date: 22.03.19
  * Time: 18:02
  */
