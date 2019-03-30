@@ -1,9 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: danila
- * Date: 30.03.19
- * Time: 4:03
+ * Contacts model
  */
 
 namespace OpenCRM\Model;
