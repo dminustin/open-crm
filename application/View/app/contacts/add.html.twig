@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}
 {% block title %}New/Edit contact{% endblock %}
 {% block body %}
-    <div class="container" id="form">
+    <form class="container" id="form">
         <input type="hidden" name="id" value="">
         <div class="form-group">
             <label for="inputName" class="col-sm-1-12 col-form-label">Display name</label>
@@ -9,11 +9,11 @@
         </div>
         <div class="form-group">
             <label for="inputName" class="col-sm-1-12 col-form-label">Phone</label>
-            <input type="text" class="form-control" name="display_name" id="phone" placeholder="Phone">
+            <input type="text" class="form-control" name="phone" id="phone" placeholder="Phone">
         </div>
         <div class="form-group">
             <label for="inputName" class="col-sm-1-12 col-form-label">Email</label>
-            <input type="text" class="form-control" name="display_name" id="email" placeholder="email">
+            <input type="text" class="form-control" name="email" id="email" placeholder="email">
         </div>
         <div class="form-group">
             <label for="inputName" class="col-sm-1-12 col-form-label">Category</label>
@@ -25,16 +25,51 @@
             </select>
         </div>
         <div class="form-group">
+            <label for="inputName" class="col-sm-1-12 col-form-label">Tags</label>
+            <select class="form-control" multiple="multiple" name="tags[]" id="tags"></select>
+        </div>
+        <div class="form-group">
             <label for="inputName" class="col-sm-1-12 col-form-label">Description short</label>
-            <input type="text" class="form-control" name="display_name" id="description_short" placeholder="description short">
+            <input type="text" class="form-control" name="description_short" id="description_short" placeholder="description short">
         </div>
         <div class="form-group">
             <label for="inputName" class="col-sm-1-12 col-form-label">Description full</label>
-            <textarea class="form-control" name="display_name" id="description_full" placeholder="description full" rows="5"></textarea>
+            <textarea class="form-control" name="description_full" id="description_full" placeholder="description full" rows="5"></textarea>
         </div>
         <div class="form-group right">
             <button type="button" id="saveBtn" class="btn btn-success"><span><i class="fa fa-check" aria-hidden="true"></i> Save</span></button>
         </div>
-    </div>
+    </form>
 
+{% endblock %}
+{% block scripts %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script>
+    $(function(){
+        $("#tags").select2({
+            tags: true,
+            tokenSeparators: [',']
+        });
+
+
+        $('#saveBtn').click(function(){
+            $.ajax({
+                url: '/ajax/contacts/add',
+                type: 'POST',
+                dataType: 'json',
+                data: $('#form').serialize(),
+                success: function(data) {
+                    console.log(data)
+                }
+            });
+
+        });
+
+    });
+
+
+
+
+    </script>
 {% endblock %}

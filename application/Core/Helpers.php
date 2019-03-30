@@ -56,8 +56,8 @@ function getPostVar($key, $quote = false) {
         : null;
 }
 
-function quote($value) {
-    return trim(htmlentities($value, ENT_QUOTES, 'utf-8', false));
+function quote($value, $type = \OpenCRM\Core\PrepareInputValues::PIV_AL_NUM_SYMBOLS) {
+    return \OpenCRM\Core\PrepareInputValues::escapeTheInput($value, $type);
 }
 
 /**

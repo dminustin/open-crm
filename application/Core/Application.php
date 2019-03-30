@@ -4,6 +4,7 @@
 namespace OpenCRM\Core;
 
 use OpenCRM\Controller\Ajax\AjaxLogin;
+use OpenCRM\Controller\Ajax\Contacts\AjaxAdd;
 use OpenCRM\Controller\App\ContactsAddClass;
 use OpenCRM\Controller\App\DashboardClass;
 use OpenCRM\Controller\HomeController;
@@ -87,6 +88,9 @@ class Application
             });
             $router->all('/app/contacts/add', function () {
                 ContactsAddClass::run();
+            });
+            $router->all('/ajax/contacts/add', function () {
+                AjaxAdd::run();
             });
         }
 
