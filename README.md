@@ -1,6 +1,10 @@
 # OPEN CRM
 Version 0.0.1
 
+The CRM is under construction
+
+BUT you can help me to complete the project
+
 ## Configuration
 Use *Config/config.local.json* for local config and *Config/config.json* for global
 
