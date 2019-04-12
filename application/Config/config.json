@@ -7,5 +7,6 @@
   "DB_CHARSET": "utf8",
   "CACHE_TYPE": "file",
   "PASS_SALT1": "You HAVE TO ChanGe ths value",
-  "PASS_SALT2": "AnD this value too:)"
+  "PASS_SALT2": "AnD this value too:)",
+  "TWIG_CACHE": false
 }

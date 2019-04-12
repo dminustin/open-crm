@@ -40,6 +40,14 @@ This project is licensed under the MIT License. This means you can use and modif
 
 [TWIG](https://github.com/twigphp/Twig) template language
 
+[SweetAlert2](https://github.com/sweetalert2/sweetalert2) A beautiful, responsive, customizable, accessible (WAI-ARIA) replacement for JavaScript's popup boxes. Zero dependencies.
+                                                          
 [bramus/router](https://github.com/bramus/router) A lightweight and simple object oriented PHP Router. Built by Bram(us) Van Damme
+
+Select2
+
+JQuery
+
+Twig
 
 Symfony Cache

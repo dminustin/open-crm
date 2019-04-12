@@ -9,6 +9,7 @@ class Model
         $prefix = static::class;
         $addr = md5($prefix) . '_' . $key;
         $item = cache()->getItem($addr);
+        //$item->expiresAt($ttl);
         $item->set($value);
         cache()->save($item);
     }
@@ -19,7 +20,7 @@ class Model
         if (!cache()->hasItem($addr)) {
             return $default;
         }
-
+        return cache()->getItem($key);
     }
 
     static function invalidateCacheValue($key) {

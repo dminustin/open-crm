@@ -43,8 +43,8 @@
 
 {% endblock %}
 {% block scripts %}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <link href="/css/select2.min.css" rel="stylesheet" />
+    <script src="/js/select2.min.js"></script>
     <script>
     $(function(){
         $("#tags").select2({
@@ -60,8 +60,38 @@
                 dataType: 'json',
                 data: $('#form').serialize(),
                 success: function(data) {
-                    console.log(data)
-                }
+                    webAlert(data.message, (data.result) ? 'success' : 'error');
+                    if (!data.result) {
+                        return;
+                    }
+                    Swal.fire({
+                        title: 'Do you wish to add another contact',
+                        type: 'question',
+                        html:
+                            '<a href="/app/contacts/list">No, go to contacts</a>',
+                        showCloseButton: true,
+                        showCancelButton: true,
+                        focusConfirm: false,
+                        confirmButtonText:
+                            'Add New',
+                        confirmButtonAriaLabel: 'Add new',
+                        cancelButtonText:
+                            'View list',
+                        cancelButtonAriaLabel: 'View list',
+                    }).then(function(result) {
+                        webLog(result)
+                        if (result) {
+                            document.location.reload();
+                        } else {
+                            document.location.href = '/app/contacts/list'
+                        }
+                    });
+
+                },
+                error: function(data) {
+                    webAlert(data.message, (data.result) ? 'success' : 'error');
+                },
+
             });
 
         });

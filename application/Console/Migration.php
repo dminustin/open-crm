@@ -2,7 +2,6 @@
 namespace OpenCRM\Console;
 
 
-use OpenCRM\Core\Application;
 use OpenCRM\Core\Console;
 
 class Migration extends Console

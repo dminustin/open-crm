@@ -1,6 +1,6 @@
 <?php
 /**
- * Common exception class
+ * Invalid type exception
  */
 
 namespace OpenCRM\Exception;
@@ -8,13 +8,10 @@ namespace OpenCRM\Exception;
 
 use Throwable;
 
-class CommonException extends \Exception
+class SqlErrorException extends CommonException
 {
     public function __construct($message = "", $code = 0, Throwable $previous = null)
     {
-        if (!is_string($message)) {
-            $message = json_encode($message, JSON_UNESCAPED_UNICODE);
-        }
         parent::__construct($message, $code, $previous);
     }
 }

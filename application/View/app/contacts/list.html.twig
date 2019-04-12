@@ -1,0 +1,38 @@
+{% extends "base.html.twig" %}
+{% block title %}New/Edit contact{% endblock %}
+{% block body %}
+    <table id="contactList">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Short</th>
+            <th>Full</th>
+        </tr>
+        </thead>
+    </table>
+
+{% endblock %}
+{% block scripts %}
+    <link href="/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="/js/jquery.dataTables.min.js"></script>
+    <script>
+
+        $(function(){
+            $('#contactList').DataTable( {
+                ajax: {
+                    "url": '/ajax/contacts/list',
+                    "type": 'POST',
+                    dataSrc: "data"
+                },
+                "columnDefs": [
+
+                    { "visible": false,  "targets": [ 0 ] }
+                ]
+            } );
+        });
+
+    </script>
+{% endblock %}

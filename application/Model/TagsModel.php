@@ -9,6 +9,7 @@ namespace OpenCRM\Model;
 
 use OpenCRM\Core\Model;
 use OpenCRM\Core\PrepareInputValues;
+use OpenCRM\Exception\SqlErrorException;
 
 class TagsModel extends Model
 {
@@ -35,8 +36,22 @@ class TagsModel extends Model
         if ($db->exec("insert into tags set tag_name='${tag}'")) {
             return $db->lastInsertId();
         }
+        throw new SqlErrorException($db->errorInfo());
     }
 
 
+    static function clearContactsTags($user_id)
+    {
+        db()->exec('delete from contacts_tags where contact_id=' . $user_id);
+    }
+
+    static function addContactsTags($user_id, $tag_ids) {
+        static::clearContactsTags($user_id);
+        $sql = [];
+        foreach ($tag_ids as $id) {
+            $sql[] = "({$user_id}, {$id})";
+        }
+        db()->exec('insert into contacts_tags (contact_id, tag_id) values ' . join(', ', $sql));
+    }
 
 }

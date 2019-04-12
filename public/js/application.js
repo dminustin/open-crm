@@ -1,3 +1,11 @@
 function webAlert(message, messageType) {
-    alert(message);
+    Swal.fire(
+        '',
+        message,
+        messageType
+    )
+}
+
+function webLog(msg) {
+    console.log(msg);
 }
