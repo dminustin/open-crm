@@ -8,5 +8,6 @@
   "CACHE_TYPE": "file",
   "PASS_SALT1": "You HAVE TO ChanGe ths value",
   "PASS_SALT2": "AnD this value too:)",
+  "COMMON_SALT": "S1mpl3 s@1t for most common cases",
   "TWIG_CACHE": false
 }

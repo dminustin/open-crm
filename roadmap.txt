@@ -1,0 +1,39 @@
+This file contains the roadmap for the Open CRM Project
+=======================================================
+
+What is the functionality i want to see in the project:
+
+- create/manage contacts
+- admin can create/manage users
+- attach/manage documents to contacts
+- exchange documents between users
+- manipulation with POP3/IMAP (download e-mail and attach it to contact or create new one)
+- calendar with to-do list
+- API
+
+
+What has been done:
+- System installation (blank site with admin user)
+- Migrations
+- Authorization
+- Contacts : adding, listing
+- Documents : uploading
+
+
+Next in plans / Backlog:
+- manage documents
+- manage contacts
+- calendar
+- user rights
+- managing users
+- POP3/IMAP
+
+
+What must be:
+- Documentation :)
+
+
+What i would like to do:
+- integration with Google Calendar
+- integration with another systems like Slack, Jira, Redmine etc
+- own App in Google / Apple markets

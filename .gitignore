@@ -3,3 +3,4 @@ vendor
 composer.lock
 public/css/.sass-cache
 data/cache
+data/uploads

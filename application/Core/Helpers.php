@@ -12,14 +12,16 @@ use OpenCRM\Core\Application;
  * @param null $default
  * @return mixed|null
  */
-function config($key, $default=null) {
+function config($key, $default = null)
+{
     return (isset(Application::app()->config[$key])) ? Application::app()->config[$key] : $default;
 }
 
 /**
  * @return \PDO
  */
-function db() {
+function db()
+{
     return Application::app()->db;
 }
 
@@ -32,7 +34,8 @@ function db() {
  * @throws \Twig\Error\RuntimeError
  * @throws \Twig\Error\SyntaxError
  */
-function render($template, $vars=[]) {
+function render($template, $vars = [])
+{
     return Application::app()->render($template, $vars);
 }
 
@@ -40,8 +43,18 @@ function render($template, $vars=[]) {
  * Returns true if user is logged in
  * @return bool
  */
-function userLogged() {
+function userLogged()
+{
     return (isset($_SESSION['userdata']));
+}
+
+/**
+ * Returns current user array
+ * @return mixed
+ */
+function currentUser()
+{
+    return $_SESSION['userdata'];
 }
 
 
@@ -50,19 +63,22 @@ function userLogged() {
  * @param $key
  * @return null|mixed
  */
-function getPostVar($key, $quote = false) {
+function getPostVar($key, $quote = false)
+{
     return (isset($_POST[$key])) ?
         ($quote) ? quote($_POST[$key]) : $_POST[$key]
         : null;
 }
 
-function quote($value, $type = \OpenCRM\Core\PrepareInputValues::PIV_AL_NUM_SYMBOLS) {
+function quote($value, $type = \OpenCRM\Core\PrepareInputValues::PIV_AL_NUM_SYMBOLS)
+{
     return \OpenCRM\Core\PrepareInputValues::escapeTheInput($value, $type);
 }
 
 /**
  * @return \Symfony\Component\Cache\Adapter\AbstractAdapter
  */
-function cache() {
+function cache()
+{
     return Application::app()->cache;
 }

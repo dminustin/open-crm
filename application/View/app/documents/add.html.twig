@@ -1,0 +1,44 @@
+{% extends "base.html.twig" %}
+{% block title %}Upload new documents{% endblock %}
+{% block body %}
+    <legend>Upload new document</legend>
+    <div class="container">
+        <form id="upload_form" enctype="multipart/form-data" action="/app/documents/post" method="post">
+            <div class="form-group row">
+                <label for="inputName">Title</label>
+                <input type="text" name="title" placeholder="Document title" class="form-control">
+            </div>
+            <div class="form-group row">
+                <label for="inputName">Description</label>
+                <textarea name="description" placeholder="Description (optional)" class="form-control"></textarea>
+            </div>
+            <div class="form-group row">
+                <label for="inputName">I/O Type</label>
+                <select class="form-control" name="io_type">
+                    <option value="">PLEASE SELECT</option>
+                    {% for a,b in types %}
+                        <option value="{{ a }}">{{ b }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group row">
+                <label for="inputName">Contact</label>
+                <select class="form-control" name="contact_id">
+                    <option value="">PLEASE SELECT</option>
+                    {% for a,b in contacts %}
+                        <option value="{{ b.id }}">[{{ b.id }}] {{ b.display_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group row">
+                <label for="inputName">Choose file(s)</label> &nbsp;
+                <input type="file" name="file[]" multiple="multiple">
+            </div>
+            <div class="form-group row">
+                <div class="offset-sm-6 col-sm-6">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

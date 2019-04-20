@@ -24,18 +24,18 @@ class Migration extends Console
             }
 
 
-            static::log("Start execute ${id}");
+            static::log("Start executing ${id}");
             require_once($filename);
             $class = 'Migration_' . $id;
             $result = call_user_func("${class}::run");
 
-            if ($result) {
-                db()->exec('insert into migration set id="'.$id.'"');
-            } else {
-                static::log("Error with executing ${id}");
+            if ($result === false) {
+                static::log("Error while executing ${id}");
                 return;
+            } else {
+                db()->exec('insert into migration set id="'.$id.'"');
             }
-            static::log("Done execute ${id}");
+            static::log("Done executing ${id}");
 
         }
     }

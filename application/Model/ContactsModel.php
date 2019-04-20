@@ -30,7 +30,13 @@ class ContactsModel
     ];
 
 
-    static function getContacts($post) {
+    /**
+     * Get Contact List by criteria
+     * @param array $post
+     * @return array
+     */
+    static function getContacts($post = []) {
+        //TODO implement searh by criteria
         $res = db()->query('select * from contacts');
         return $res->fetchAll();
     }

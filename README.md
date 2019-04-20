@@ -1,9 +1,14 @@
 # OPEN CRM
-Version 0.0.1
+Version 0.0.2
 
 The CRM is under construction
 
 BUT you can help me to complete the project
+
+## Roadmap
+Please read the roadmap.txt
+
+This file contains all checkpoints and roadmap of this project.
 
 ## Configuration
 Use *Config/config.local.json* for local config and *Config/config.json* for global

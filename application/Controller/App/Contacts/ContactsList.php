@@ -6,15 +6,16 @@
  * Time: 23:10
  */
 
-namespace OpenCRM\Controller\App;
+namespace OpenCRM\Controller\App\Contacts;
 
 
 use OpenCRM\Core\AppController;
 
-class DashboardClass extends AppController
+
+class ContactsList extends AppController
 {
     public static function run()
     {
-        render('app/dashboard.html.twig');
+        render('app/contacts/list.html.twig', []);
     }
 }

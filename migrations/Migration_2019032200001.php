@@ -124,6 +124,8 @@ ZZZ;
             $db->exec($sql);
         }
 
+        $db->exec("INSERT INTO `list_roles` (`role_id`, `role_name`, `rights`) VALUES ('1', 'admin', '{\"rights\": \"all\"}')");
+
         UserModel::addUser('admin', 'admin', 'Administrator', UserModel::USER_ROLE_admin);
         $db->commit();
         return true;

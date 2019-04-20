@@ -1,2 +1,27 @@
+<script>
+    function readSysMessages() {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/ajax/sysmessages",
+            success: function(data){
+                window.setTimeout("readSysMessages()", 30000)
+                var msg = "";
+                for (var i=0; i<data['data'].length; i++) {
+                    msg += '[' + data['data'][i][0] + '] ' + data['data'][i][1] + "<br>";
+                }
+                if (msg.length>0) {
+                    webAlert(msg)
+                }
+
+            }
+        });
+    }
+
+
+    $(function(){
+        readSysMessages();
+    })
+</script>
 </body>
 </html>

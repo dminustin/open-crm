@@ -30,7 +30,8 @@ class UserModel extends Model
 
 
     static function login($login, $password) {
-        $res = db()->query('select u.* from users u join 
+        $res = db()->query('select u.* from users u 
+        left join 
         list_roles lr on lr.role_id=u.role_id
         where login="' . $login . '"
         and password="' . static::hashPass($password) . '"');
