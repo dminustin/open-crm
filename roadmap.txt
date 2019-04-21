@@ -17,7 +17,7 @@ What has been done:
 - Migrations
 - Authorization
 - Contacts : adding, listing
-- Documents : uploading
+- Documents : uploading, listing, viewing
 
 
 Next in plans / Backlog:
@@ -31,6 +31,8 @@ Next in plans / Backlog:
 
 What must be:
 - Documentation :)
+- True pagination (ajax requests for limited data portions)
+- Caching
 
 
 What i would like to do:
