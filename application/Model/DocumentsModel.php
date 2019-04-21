@@ -153,8 +153,9 @@ class DocumentsModel extends Model
         files_data.file_type as files_data_file_type,
         files_data.file_size as files_data_file_size,
         files_data.file_name as files_data_file_name,
-        files_data.created_at as files_data_created_at
+        files_data.created_at as files_data_created_at,
         
+        documents.added_by
         
         FROM documents
         LEFT JOIN files_data

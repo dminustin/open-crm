@@ -10,6 +10,7 @@ namespace OpenCRM\Model\FileStorageFS;
 
 
 use OpenCRM\Core\AbstractFileData;
+use OpenCRM\Core\Application;
 
 class FileDataFS extends AbstractFileData
 {
@@ -35,7 +36,7 @@ class FileDataFS extends AbstractFileData
         $update[] = $sql[] = "file_size='{$this->fileSize}'";
         $update[] = $sql[] = "file_name='{$this->originalName}'";
 
-        $sql[] = "created_at=NOW()";
+        $sql[] = "created_at='".date('Y-m-d H:i:s', Application::app()->getAppTime())."'";
 
 
         $sql = "INSERT INTO files_data SET " . join(", ", $sql) . " ON DUPLICATE KEY UPDATE " . join(", ", $update);

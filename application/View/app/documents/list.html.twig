@@ -26,15 +26,26 @@
     <script>
 
         $(function(){
+            var current_id = '';
+            var current_color = '';
             $('#documentsList').DataTable( {
                 ajax: {
                     "url": '/ajax/documents/list',
                     "type": 'POST',
                     dataSrc: "data"
                 },
-                "order": [[ 0, "desc" ]],
+                "createdRow": function ( row, data, index ) {
+                    var id = data[3]+'-' +data[4]+'-' +data[6]+'-' + data[7]
+                    if (id !== current_id) {
+                        $('td', row).css('background-color','#EEE')
+                        current_id = id
+
+                    }
+                },
+                "order": [[ 0, "asc" ]],
+
                 "columnDefs": [
-                    { "visible": false,  "targets": [ 0, 7 ] },
+                    { "visible": false,  "targets": [  7 ] },
                 {
                     "render": function ( data, type, row ) {
                         return "<button class='btn btn-success'>archive</button>";
@@ -43,15 +54,24 @@
                 },
                 {
                     "render": function ( data, type, row ) {
-                        if (row[7].length>0) {
-                            let icon = "<span class=\"big-icon fas fa-file-"+data+"\"></span>"
+                        if (data.length>0) {
+                            let icon = "<span class=\"big-icon fas fa-file-"+row[9]+"\"></span>"
 
-                            return "<a target=_blank title='"+data+"' href='" + row[7] + "'><button type=button class='btn btn-default'>"+icon+"</button></a>"
+                            return "<a target=_blank title='"+data+"' href='" + data + "'><button type=button class='btn btn-default'>"+icon+"</button></a>"
                         }
                         return "nothing to download"
 
                     },
                     "targets": 8
+                },
+                {
+                    "render": function ( data, type, row ) {
+                        return data
+                        let id = row[3]+'-' +row[4]+'-' +row[6]+'-' + row[7]
+                        return id
+
+                    },
+                    "targets": 0
                 }
                 ]
             } );

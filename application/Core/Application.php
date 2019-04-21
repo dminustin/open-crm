@@ -42,10 +42,18 @@ class Application
     protected $render;
 
     /**
+     * Server time
+     * @var integer
+     */
+    protected $time;
+
+    /**
      * "Construct" the application:
      */
     private function __construct()
     {
+        $this->time = time();
+
 
         //Load config file
         $config_file = (file_exists(APP . 'Config/config.local.json')) ? APP . 'Config/config.local.json' : APP . 'Config/config.json';
@@ -123,6 +131,10 @@ class Application
     {
         $vars['userLogged'] = userLogged();
         echo $this->render->render($template, $vars);
+    }
+
+    public function getAppTime(){
+        return $this->time;
     }
 
 
