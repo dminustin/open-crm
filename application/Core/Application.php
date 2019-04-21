@@ -6,13 +6,15 @@ namespace OpenCRM\Core;
 use OpenCRM\Controller\Ajax\AjaxLogin;
 use OpenCRM\Controller\Ajax\AjaxSysMessages;
 use OpenCRM\Controller\Ajax\Contacts\AjaxAdd;
-use OpenCRM\Controller\Ajax\Contacts\AjaxList;
 use OpenCRM\Controller\App\Contacts\ContactsAdd;
 use OpenCRM\Controller\App\Contacts\ContactsList;
 use OpenCRM\Controller\App\Dashboard\DashboardView;
 use OpenCRM\Controller\App\Documents\DocumentsAdd;
 use OpenCRM\Controller\App\Documents\DocumentsList;
 use OpenCRM\Controller\App\Documents\DocumentsPost;
+use OpenCRM\Controller\App\Documents\DocumentsPostNote;
+use OpenCRM\Controller\App\Documents\DocumentsWriteNote;
+use OpenCRM\Controller\App\File\FileGet;
 use OpenCRM\Controller\HomeController;
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
 
@@ -175,6 +177,16 @@ class Application
             $router->post('/app/documents/post', function () {
                 DocumentsPost::run();
             });
+            $router->post('/app/documents/postnote', function () {
+                DocumentsPostNote::run();
+            });
+            $router->all('/app/documents/write', function () {
+                DocumentsWriteNote::run();
+            });
+
+            $router->all('/app/file/get', function () {
+                FileGet::run();
+            });
 
 
             //=====================================================
@@ -183,11 +195,17 @@ class Application
                 AjaxAdd::run();
             });
             $router->all('/ajax/contacts/list', function () {
-                AjaxList::run();
+                \OpenCRM\Controller\Ajax\Contacts\AjaxList::run();
             });
             $router->all('/ajax/sysmessages', function () {
                 AjaxSysMessages::run();
             });
+
+            $router->all('/ajax/documents/list', function () {
+                \OpenCRM\Controller\Ajax\Documents\AjaxList::run();
+            });
+
+
         }
 
         $router->set404(function () {

@@ -37,7 +37,11 @@ class ContactsModel
      */
     static function getContacts($post = []) {
         //TODO implement searh by criteria
-        $res = db()->query('select * from contacts');
+        $res = db()->query('select 
+            contacts.*, count(*) as cnt from contacts 
+            left join documents
+            on documents.contact_id = contacts.id
+            group by contacts.id');
         return $res->fetchAll();
     }
 

@@ -53,8 +53,39 @@ class DocumentsModel extends Model
         'contact_id',
     ];
 
+    /**
+     * Adds a new note (document with an empty attachment)
+     * @param $data
+     * @throws \OpenCRM\Exception\InvalidArgumentException
+     */
+    public static function writeNewNote($data)
+    {
+        $sqls = [];
+        foreach (static::$prepare_fields as $field => $type) {
+            $val = isset($data[$field]) ? $data[$field] : null;
+            if (empty($val) && !in_array($field, static::$required_fileds)) {
+                $sqls[$field] = "";
+                continue;
+            }
+            $val = PrepareInputValues::escapeTheInput($val, $type);
+            if (empty($val) && in_array($field, static::$required_fileds)) {
+                throw new InvalidArgumentException("Empty value for ${field} not allowed");
+            }
+            $sqls[] = "$field = '$val'";
+        }
+        print_r($sqls);
+        $sql = "INSERT INTO documents SET created_at=NOW(), file_id=NULL, " . join(", ", $sqls);
+        db()->exec($sql);
+        Application::app()->addDisplayMessage('info', "Note added successfully");
+    }
 
-    static function uploadNewDocuments($data, $files)
+    /**
+     * @param $data array $_POST
+     * @param $files array $_FILES
+     * @throws CommonException
+     * @throws \OpenCRM\Exception\InvalidArgumentException
+     */
+    public static function uploadNewDocuments($data, $files)
     {
         $sqls = [];
         foreach (static::$prepare_fields as $field => $type) {
@@ -102,9 +133,68 @@ class DocumentsModel extends Model
         }
 
 
-
-
     }
+
+
+    public static function getDocumentsList($terms = [])
+    {
+        //todo apply terms
+        $res = db()->query("SELECT 
+        documents.id, 
+        contacts.display_name,
+        users.name,
+        documents.io_type,
+        documents.title,
+        documents.description,
+        documents.created_at,
+        
+        files_data.id as files_data_id,
+        files_data.mime_type as files_data_mime_type,
+        files_data.file_type as files_data_file_type,
+        files_data.file_size as files_data_file_size,
+        files_data.file_name as files_data_file_name,
+        files_data.created_at as files_data_created_at
+        
+        
+        FROM documents
+        LEFT JOIN files_data
+        ON files_data.id=documents.file_id
+        
+        LEFT JOIN contacts
+        ON contacts.id = documents.contact_id
+        
+        LEFT JOIN users
+        ON users.id = documents.added_by");
+        if (!$res->rowCount()) {
+            return [];
+        }
+        $result = $res->fetchAll();
+
+        array_walk($result, function(&$a) {
+            $fd = [
+                'id'=>$a['files_data_id'],
+                'mime_type'=>$a['files_data_mime_type'],
+                'file_type'=>$a['files_data_file_type'],
+                'file_size'=>$a['files_data_file_size'],
+                'file_name'=>$a['files_data_file_name'],
+                'created_at'=>$a['files_data_created_at']
+            ];
+            unset(
+                $a['files_data_id'],
+                $a['files_data_mime_type'],
+                $a['files_data_file_type'],
+                $a['files_data_file_size'],
+                $a['files_data_file_name'],
+                $a['files_data_created_at']
+            );
+
+            $a['file_url'] = (new FileStorageFS())->getFileUrl(FileDataFS::createByArray($fd));
+            $a['file_type'] = $fd['file_type'];
+        });
+
+        return $result;
+    }
+
 
 
 }

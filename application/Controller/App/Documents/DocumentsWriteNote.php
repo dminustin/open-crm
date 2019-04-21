@@ -10,14 +10,20 @@ namespace OpenCRM\Controller\App\Documents;
 
 
 use OpenCRM\Core\AppController;
+use OpenCRM\Core\Application;
 use OpenCRM\Model\ContactsModel;
+use OpenCRM\Model\DocumentsModel;
+use OpenCRM\Model\UserModel;
 
 
-class DocumentsList extends AppController
+class DocumentsWriteNote extends AppController
 {
+
+
     public static function run()
     {
         $contacts = ContactsModel::getContacts();
-        render('app/documents/list.html.twig', ['contacts'=>$contacts]);
+        $types = DocumentsModel::$DTYPES;
+        render('app/documents/writenote.html.twig', ['contacts'=>$contacts, 'types'=>$types]);
     }
 }

@@ -1,0 +1,61 @@
+{% extends "base.html.twig" %}
+{% block title %}Documents{% endblock %}
+{% block body %}
+    <legend>Added documents</legend>
+    <table id="documentsList">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Contact</th>
+            <th>Added by</th>
+            <th>Type</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Added at</th>
+            <th>Action</th>
+            <th>Download</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+    </table>
+{% endblock %}
+
+{% block scripts %}
+    <link href="/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="/js/jquery.dataTables.min.js"></script>
+    <script>
+
+        $(function(){
+            $('#documentsList').DataTable( {
+                ajax: {
+                    "url": '/ajax/documents/list',
+                    "type": 'POST',
+                    dataSrc: "data"
+                },
+                "order": [[ 0, "desc" ]],
+                "columnDefs": [
+                    { "visible": false,  "targets": [ 0, 7 ] },
+                {
+                    "render": function ( data, type, row ) {
+                        return "<button class='btn btn-success'>archive</button>";
+                    },
+                    "targets": 9
+                },
+                {
+                    "render": function ( data, type, row ) {
+                        if (row[7].length>0) {
+                            let icon = "<span class=\"big-icon fas fa-file-"+data+"\"></span>"
+
+                            return "<a target=_blank title='"+data+"' href='" + row[7] + "'><button type=button class='btn btn-default'>"+icon+"</button></a>"
+                        }
+                        return "nothing to download"
+
+                    },
+                    "targets": 8
+                }
+                ]
+            } );
+        });
+
+    </script>
+{% endblock %}

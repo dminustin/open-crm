@@ -10,6 +10,8 @@
             <th>Email</th>
             <th>Short</th>
             <th>Full</th>
+            <th>Data</th>
+            <th>Action</th>
         </tr>
         </thead>
     </table>
@@ -28,7 +30,29 @@
                     dataSrc: "data"
                 },
                 "columnDefs": [
+                    {
+                        "render": function ( data, type, row ) {
+                            return (data == 0) ? 0 : '<a href="/app/documents/list?contact_id='+row[0]+'" class="badge badge-success">'+data+'</a>';
+                        },
+                        "targets": 6
+                    },
+                    {
+                        "render": function ( data, type, row ) {
+                            let cmd_addnote = '<a class="badge badge-success" href="/app/documents/write?contact_id='+row[0]+'">add note</a>';
+                            let cmd_archive = '<a class="badge badge-danger" href="#">TODO archive</a>';
+                            let cmd_edit = '<a class="badge badge-warning" href="#">TODO edit</a>';
+                            let cmd_divider = ' &nbsp; ';
+                            let h = "";
 
+                            h += cmd_addnote;
+                            h += cmd_divider;
+                            h += cmd_archive;
+                            h += cmd_divider;
+                            h += cmd_edit;
+                            return h;
+                        },
+                        "targets": 7
+                    },
                     { "visible": false,  "targets": [ 0 ] }
                 ]
             } );

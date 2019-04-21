@@ -14,10 +14,9 @@ abstract class AbstractFileData
     const FTYPE_ARCHIVE = "archive";
     const FTYPE_TEXT = "text";
 
-
     static $mime_types = [
         // texts
-        "text/plain"=>self::FTYPE_TEXT,
+        "text/plain" => self::FTYPE_TEXT,
 
         // images
         "image/png" => self::FTYPE_IMAGE,
@@ -40,14 +39,13 @@ abstract class AbstractFileData
     ];
 
 
-
     static $fields = [
-        'ID'=>'id',
-        'mimeType'=>'mime_type',
-        'fileType'=>'file_type',
-        'fileSize'=>'file_size',
-        'originalName'=>'file_name',
-        'createdAt'=>'created_at'
+        'ID' => 'id',
+        'mimeType' => 'mime_type',
+        'fileType' => 'file_type',
+        'fileSize' => 'file_size',
+        'originalName' => 'file_name',
+        'createdAt' => 'created_at'
     ];
 
 
@@ -76,31 +74,23 @@ abstract class AbstractFileData
     }
 
 
-    /**
-     * Returns AbstractFileData or null (if not found)
-     * @param $id
-     * @return AbstractFileData|null
-     */
-    abstract static public function findByID($id);
-
-    /**
-     * Deletes FileData
-     * @param $id
-     * @return boolean
-     */
-    abstract static public function deleteByID($id);
-
-    /**
-     * Saves the file data
-     * @return mixed
-     */
-    abstract public function saveData();
-
-    public static function getFileTypeByMimeType($mimeType)
+    public static function calculateFileHash($salt1, $salt2, $data)
     {
-        return (isset(static::$mime_types[$mimeType])) ? static::$mime_types[$mimeType] : "";
+        return md5(md5($data . $salt1) . $salt2);
     }
 
+
+
+    /**
+     * Sets original name
+     * @param $originalName
+     * @return $this
+     */
+    public function originalName($originalName)
+    {
+        $this->originalName = $originalName;
+        return $this;
+    }
 
     /**
      * Sets file type (image, text, archive)
@@ -110,25 +100,6 @@ abstract class AbstractFileData
     public function fileType($fileType)
     {
         $this->fileType = $fileType;
-        return $this;
-    }
-
-
-    public function setID($id)
-    {
-        $this->ID = $id;
-        return $this;
-    }
-
-
-    /**
-     * Sets mime type (image/jpeg e.t.c)
-     * @param $mimeType
-     * @return $this
-     */
-    public function mimeType($mimeType)
-    {
-        $this->mimeType = $mimeType;
         return $this;
     }
 
@@ -144,13 +115,72 @@ abstract class AbstractFileData
     }
 
     /**
-     * Sets original name
-     * @param $originalName
+     * Sets mime type (image/jpeg e.t.c)
+     * @param $mimeType
      * @return $this
      */
-    public function originalName($originalName)
+    public function mimeType($mimeType)
     {
-        $this->originalName = $originalName;
+        $this->mimeType = $mimeType;
+        return $this;
+    }
+
+    public static function getFileTypeByMimeType($mimeType)
+    {
+        return (isset(static::$mime_types[$mimeType])) ? static::$mime_types[$mimeType] : "";
+    }
+
+    /**
+     * Create object from hash array
+     * @param $data
+     * @return AbstractFileData
+     */
+    public static function createByArray($data)
+    {
+        $result = new Static();
+        foreach (static::$fields as $internal => $external) {
+            if (isset($data[$external])) {
+                $result->$internal = $data[$external];
+            }else if (isset($data[$internal])) {
+                $result->$internal = $data[$internal];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns AbstractFileData or null (if not found)
+     * @param $id
+     * @return AbstractFileData|null
+     */
+    abstract static public function findByID($id);
+
+    /**
+     * Deletes FileData
+     * @param $id
+     * @return boolean
+     */
+    abstract static public function deleteByID($id);
+
+    public function __toString()
+    {
+        $result = [];
+        foreach (static::$fields as $k => $v) {
+            $result[$k] = $this->$k;
+        }
+        return json_encode($result, JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * Saves the file data
+     * @return mixed
+     */
+    abstract public function saveData();
+
+    public function setID($id)
+    {
+        $this->ID = $id;
         return $this;
     }
 

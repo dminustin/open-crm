@@ -9,5 +9,8 @@
   "PASS_SALT1": "You HAVE TO ChanGe ths value",
   "PASS_SALT2": "AnD this value too:)",
   "COMMON_SALT": "S1mpl3 s@1t for most common cases",
+  "ATTACHMENTS_PREFIX": "/app/file/get",
+  "ATTACHMENTS_SALT1": "Chang3 me too!!!",
+  "ATTACHMENTS_SALT2": "Chan!!!!g3 m!!!e too!!!",
   "TWIG_CACHE": false
 }

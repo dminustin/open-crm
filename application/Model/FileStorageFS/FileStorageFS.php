@@ -16,6 +16,16 @@ use OpenCRM\Model\FileStorageFS\FileDataFS;
 
 class FileStorageFS extends AbstractFileStorage
 {
+
+    public function readFile($fileData)
+    {
+        $fname = $this->generateFilePath($fileData) . $this->generateFileName($fileData);
+        if (!file_exists($fname)) {
+            throw new CommonException("File not found");
+        }
+        return file_get_contents($fname);
+    }
+
     public function deleteFile($fileData)
     {
         // TODO: Implement deleteFile() method.
@@ -28,7 +38,14 @@ class FileStorageFS extends AbstractFileStorage
 
     public function getFileUrl($fileData)
     {
-        // TODO: Implement getFileUrl() method.
+        if (empty($fileData->ID)) {
+            return "";
+        }
+        $url = Application::app()->config['ATTACHMENTS_PREFIX'];
+        $salt1 = Application::app()->config['ATTACHMENTS_SALT1'];
+        $salt2 = Application::app()->config['ATTACHMENTS_SALT2'];
+        $data = base64_encode($fileData);
+        return $url . '?id=' . $fileData->ID . '&data=' . $data . '&hash=' . FileDataFS::calculateFileHash($salt1, $salt2, $data);
     }
 
     public function saveFileContent($fileData, $fileContent)

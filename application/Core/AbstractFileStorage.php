@@ -18,7 +18,7 @@ abstract class AbstractFileStorage
     public function bucket($bucket)
     {
         //todo create if not exists
-        $this->bucket=$bucket;
+        $this->bucket = $bucket;
         return $this;
     }
 
@@ -53,6 +53,13 @@ abstract class AbstractFileStorage
      * @return mixed
      */
     abstract public function downloadFile($fileData, $filePath);
+
+    /**
+     * copy file from the bucket
+     * @param $fileData AbstractFileData
+     * @return string
+     */
+    abstract public function readFile($fileData);
 
     /**
      * outputs: 'http://domain.com/files/f/i/file.txt'
