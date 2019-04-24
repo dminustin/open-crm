@@ -218,6 +218,12 @@ class Application
             });
 
 
+            $router->all('/ajax/events/add', function () {
+                \OpenCRM\Controller\Ajax\Events\AjaxAdd::run();
+            });
+
+
+
         }
 
         $router->set404(function () {

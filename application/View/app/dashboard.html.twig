@@ -1,3 +1,216 @@
 {% extends "base.html.twig" %}
 {% block title %}Dashboard{% endblock %}
-{% block body %}Dashboard{% endblock %}
+{% block body %}
+    <div id='wrap'>
+    <div id='calendar'></div>
+    <div style='clear:both'></div>
+</div>{% endblock %}
+{% block css %}
+    <link href='/css/fullcalendar.css' rel='stylesheet' />
+    <link href='/css/fullcalendar.print.css' rel='stylesheet' media='print' />
+{% endblock %}
+{% block scripts %}
+    <script src='/js/jquery-ui.custom.min.js' type="text/javascript"></script>
+    <script src='/js/fullcalendar.js' type="text/javascript"></script>
+    <script>
+
+        //todo write correct functions
+        function showEventInfo(obj) {
+            alert($(obj).attr('data-id'))
+        }
+
+        function onEventChange(e) {
+            console.log(e)
+        }
+
+        $(document).ready(function() {
+
+            var date = new Date();
+            var d = date.getDate();
+            var m = date.getMonth();
+            var y = date.getFullYear();
+
+            /*  className colors
+
+            className: default(transparent), important(red), chill(pink), success(green), info(blue)
+
+            */
+
+
+            /* initialize the external events
+            -----------------------------------------------------------------*/
+
+            $('#external-events div.external-event').each(function() {
+
+                // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+                // it doesn't need to have a start or end
+                var eventObject = {
+                    title: $.trim($(this).text()) // use the element's text as the event title
+                };
+
+                // store the Event Object in the DOM element so we can get to it later
+                $(this).data('eventObject', eventObject);
+
+                // make the event draggable using jQuery UI
+                $(this).draggable({
+                    zIndex: 999,
+                    revert: true,      // will cause the event to go back to its
+                    revertDuration: 0  //  original position after the drag
+                });
+
+            });
+
+
+            /* initialize the calendar
+            -----------------------------------------------------------------*/
+
+            var calendar =  $('#calendar').fullCalendar({
+                header: {
+                    left: 'title',
+                    center: 'agendaDay,agendaWeek,month',
+                    right: 'prev,next today'
+                },
+                editable: true,
+                firstDay: 1, //  1(Monday) this can be changed to 0(Sunday) for the USA system
+                selectable: true,
+                defaultView: 'month',
+
+                axisFormat: 'h:mm',
+                columnFormat: {
+                    month: 'ddd',    // Mon
+                    week: 'ddd d', // Mon 7
+                    day: 'dddd M/d',  // Monday 9/7
+                    agendaDay: 'dddd d'
+                },
+                titleFormat: {
+                    month: 'MMMM yyyy', // September 2009
+                    week: "MMMM yyyy", // September 2009
+                    day: 'MMMM yyyy'                  // Tuesday, Sep 8, 2009
+                },
+                allDaySlot: false,
+                selectHelper: true,
+                select: function(start, end, allDay) {
+                    let timeSelect = '<select id="start_hour" class="form-control">';
+                    for (let i=0; i<24; i++) {
+                        let s = (i>9) ? i : '0'+i;
+                        timeSelect += '<option value="'+i+'">' + s + '</option>'
+                    }
+                    timeSelect+='</select>'
+
+
+                    let minuteSelect = '<select id="start_minute" class="form-control">';
+                    for (let i=0; i<60; i+=5) {
+                        let s = (i>9) ? i : '0'+i;
+                        minuteSelect += '<option value="'+i+'">' + s + '</option>'
+                    }
+                    minuteSelect+='</select>'
+
+
+                    let start_td = '<div class="row"><div class="col col-sm-3">'
+                    let middle_td= '</div><div class="col col-sm-9">'
+                    let end_td= '</div></div> <br>'
+
+                    Swal.fire({
+                        title: 'Add new event',
+                        html:
+                            start_td +
+                            'Event title:' +
+                            middle_td +
+                            '<input type="text" id="event_title" class="form-control">' +
+                            end_td +
+                            start_td +
+                            'Event start hour:' +
+                            middle_td +
+                            timeSelect +
+                        end_td+
+                            start_td +
+                            'Event start minute:' +
+                            middle_td +
+                            minuteSelect +
+                        end_td
+                        ,
+                        onBeforeOpen: function() {
+                        },
+                        onClose: function() {
+
+                        }
+                    }).then(function(result){
+                        if (!result.value) {
+                            return
+                        }
+                        let title = $('#event_title').val();
+                        let startHour = $('#start_hour').val();
+                        let startMinute = $('#start_minute').val();
+                        let startDate = new Date(start.getFullYear(), start.getMonth(), start.getDate(),startHour, startMinute)
+
+                        $.ajax({
+                            url: '/ajax/events/add',
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {
+                                title: title,
+                                start_time: {'h': startHour, 'm': startMinute},
+                                start_date: {'y': start.getFullYear(), 'm': start.getMonth(), 'd': start.getDate()}
+                            },
+                            success: function(data){
+                                if (!data.result) {
+                                    webAlert(data.message, 'error')
+                                    return
+                                }
+                                calendar.fullCalendar('renderEvent',
+                                    {
+                                        title: title,
+                                        start: startDate,
+                                        allDay: false,
+                                        id: data.data['event_id']
+                                    },
+                                    true // make the event "stick"
+                                );
+                            },
+                            error: function(){
+
+                            }
+                        })
+
+
+
+                    });
+
+
+
+                    calendar.fullCalendar('unselect');
+                },
+                droppable: true, // this allows things to be dropped onto the calendar !!!
+                drop: function(date, allDay) { // this function is called when something is dropped
+
+                    // retrieve the dropped element's stored Event Object
+                    var originalEventObject = $(this).data('eventObject');
+
+                    // we need to copy it, so that multiple events don't have a reference to the same object
+                    var copiedEventObject = $.extend({}, originalEventObject);
+
+                    // assign it the date that was reported
+                    copiedEventObject.start = date;
+                    copiedEventObject.allDay = allDay;
+
+                    // render the event on the calendar
+                    // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+                    $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+
+                    // is the "remove after drop" checkbox checked?
+                    if ($('#drop-remove').is(':checked')) {
+                        // if so, remove the element from the "Draggable Events" list
+                        $(this).remove();
+                    }
+
+                },
+
+                events: [
+                ],
+            });
+
+        });
+
+    </script>
+
+{% endblock %}
